@@ -1,6 +1,7 @@
 package com.kang.commentview;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -46,7 +47,8 @@ public class MainActivity extends AppCompatActivity
 
     @OnClick(R.id.send_comment)
     public void onViewClicked() {
-        commentPopup = new CommentPopup(this);
-        commentPopup.showAtLocation(commentContainer, Gravity.BOTTOM, 0, 0);
+//        commentPopup = new CommentPopup(this);
+//        commentPopup.showAtLocation(commentContainer, Gravity.BOTTOM, 0, 0);
+        startActivity(new Intent(this, ScrollActivity.class));
     }
 }
