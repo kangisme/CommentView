@@ -18,8 +18,11 @@
 
         </WebView>
 
-        <View
+        <TextView
             android:id="@+id/send_comment"
+            android:text="点击打开评论"
+            android:gravity="center"
+            android:textSize="18dp"
             android:layout_width="match_parent"
             android:layout_height="50dp"/>
     </LinearLayout>
