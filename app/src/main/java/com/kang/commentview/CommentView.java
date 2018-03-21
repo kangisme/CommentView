@@ -145,6 +145,7 @@ public class CommentView extends LinearLayout
                 int scrolledY = (int) (mLastMoveY - mMoveY);
                 scrollBy(0, scrolledY);
                 mLastMoveY = mMoveY;
+                onClickListener.onScrolling(getBgAlpha(getScrollY()));
                 break;
             case MotionEvent.ACTION_UP:
                 if (getScrollY() < -resetDistance)
@@ -152,13 +153,13 @@ public class CommentView extends LinearLayout
                     if (onClickListener != null)
                     {
                         onClickListener.onCloseClick(null);
-                        //窗口关闭后复位，不然下次弹出可能会保留上次滑动的位置
+                        // 窗口关闭后复位，不然下次弹出可能会保留上次滑动的位置
                         scrollTo(0, 0);
                     }
                 }
                 else
                 {
-                    //弹性复位
+                    // 弹性复位
                     mScroller.startScroll(0, getTop() + getScrollY(), 0, -getScrollY(), 500);
                     invalidate();
                 }
@@ -170,7 +171,7 @@ public class CommentView extends LinearLayout
     @Override
     public void computeScroll()
     {
-        //重写computeScroll()方法，并在其内部完成平滑滚动的逻辑
+        // 重写computeScroll()方法，并在其内部完成平滑滚动的逻辑
         if (mScroller.computeScrollOffset())
         {
             scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
@@ -205,7 +206,19 @@ public class CommentView extends LinearLayout
     }
 
     /**
+     * 根据当前滚动偏移值，计算背景透明度
+     * 
+     * @param scrollY Y方向偏移值
+     * @return alpha
+     */
+    private float getBgAlpha(float scrollY)
+    {
+        return (float) (0.6 * (-scrollY) / getHeight() + 0.4);
+    }
+
+    /**
      * 点击事件接口抛出
+     * 
      * @param listener listener
      */
     public void setOnClickListener(OnClickListener listener)
@@ -218,6 +231,8 @@ public class CommentView extends LinearLayout
         void onCloseClick(View view);
 
         void onItemClick(AdapterView<?> parent, View view, int position, long id);
+
+        void onScrolling(float bgAlpha);
     }
 
     private class CommentAdapter extends BaseAdapter

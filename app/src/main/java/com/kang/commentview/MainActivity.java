@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
@@ -40,6 +42,10 @@ public class MainActivity extends AppCompatActivity
 
     private PopupWindow popupWindow;
 
+    private WindowManager.LayoutParams lp;
+
+    private Window window;
+
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -51,6 +57,9 @@ public class MainActivity extends AppCompatActivity
         webView.loadUrl("http://www.baidu.com");
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient());
+
+        lp = getWindow().getAttributes();
+        window = getWindow();
 
         List<String> lists = new ArrayList<>();
         lists.add("第一个");
@@ -83,12 +92,20 @@ public class MainActivity extends AppCompatActivity
             public void onCloseClick(View view) {
                 if (popupWindow != null) {
                     popupWindow.dismiss();
+                    lp.alpha = 1;
+                    window.setAttributes(lp);
                 }
             }
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(MainActivity.this, "Click " + position, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onScrolling(float bgAlpha) {
+                lp.alpha = bgAlpha;
+                window.setAttributes(lp);
             }
         });
         popupWindow = new PopupWindow(view);
@@ -105,7 +122,7 @@ public class MainActivity extends AppCompatActivity
         popupWindow.setAnimationStyle(R.style.popwin_anim_style);
 
         //实例化一个ColorDrawable颜色为透明
-        ColorDrawable dw = new ColorDrawable(0x00FFFFFF);
+        ColorDrawable dw = new ColorDrawable(0x00000000);
 
         //设置SelectPicPopupWindow弹出窗体的背景
         popupWindow.setBackgroundDrawable(dw);
@@ -114,5 +131,8 @@ public class MainActivity extends AppCompatActivity
     @OnClick(R.id.send_comment)
     public void onViewClicked() {
         popupWindow.showAtLocation(commentContainer, Gravity.BOTTOM, 0, 0);
+        //产生背景变暗效果
+        lp.alpha = 0.4f;
+        window.setAttributes(lp);
     }
 }
