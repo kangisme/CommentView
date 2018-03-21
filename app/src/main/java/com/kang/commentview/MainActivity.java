@@ -58,33 +58,29 @@ public class MainActivity extends AppCompatActivity
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient());
 
-        lp = getWindow().getAttributes();
-        window = getWindow();
+        setWindowAlpha(1f);
 
         List<String> lists = new ArrayList<>();
-        lists.add("第一个");
+        lists.add("第1个");
         lists.add("第2个");
         lists.add("第3个");
         lists.add("第4个");
         lists.add("第5个");
         lists.add("第6个");
         lists.add("第7个");
-        lists.add("第7个");
-        lists.add("第7个");
-        lists.add("第7个");
-        lists.add("第7个");
-        lists.add("第7个");
-        lists.add("第7个");
-        lists.add("第7个");
-        lists.add("第7个");
-        lists.add("第7个");
-        lists.add("第7个");
-        lists.add("第7个");
-        lists.add("第7个");
-        lists.add("第7个");
-        lists.add("第7个");
-        lists.add("第7个");
-        lists.add("第7个");
+        lists.add("第8个");
+        lists.add("第9个");
+        lists.add("第10个");
+        lists.add("第11个");
+        lists.add("第12个");
+        lists.add("第13个");
+        lists.add("第14个");
+        lists.add("第15个");
+        lists.add("第16个");
+        lists.add("第17个");
+        lists.add("第18个");
+        lists.add("第19个");
+        lists.add("第20个");
 
         CommentView view = new CommentView(this, lists);
         view.setOnClickListener(new CommentView.OnClickListener() {
@@ -104,8 +100,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onScrolling(float bgAlpha) {
-                lp.alpha = bgAlpha;
-                window.setAttributes(lp);
+                setWindowAlpha(bgAlpha);
             }
         });
         popupWindow = new PopupWindow(view);
@@ -126,13 +121,35 @@ public class MainActivity extends AppCompatActivity
 
         //设置SelectPicPopupWindow弹出窗体的背景
         popupWindow.setBackgroundDrawable(dw);
+
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                //popupwindow消失时，window背景颜色回复正常
+                setWindowAlpha(1f);
+            }
+        });
     }
 
     @OnClick(R.id.send_comment)
     public void onViewClicked() {
         popupWindow.showAtLocation(commentContainer, Gravity.BOTTOM, 0, 0);
         //产生背景变暗效果
-        lp.alpha = 0.4f;
+        setWindowAlpha(0.4f);
+    }
+
+    /**
+     * 设置window背景透明度
+     * @param alpha 透明度
+     */
+    private void setWindowAlpha(float alpha) {
+        if (lp == null) {
+            lp = getWindow().getAttributes();
+        }
+        lp.alpha = alpha;
+        if (window == null) {
+            window = getWindow();
+        }
         window.setAttributes(lp);
     }
 }
